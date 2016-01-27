@@ -10,7 +10,7 @@ ADD cert /usr/local/bin/cert
 RUN dpkg --add-architecture i386 && \
     apt-get update && \
 #   apt-get install -y unzip ca-certificates libc6-i386 zlib1g lib32z1 lib32ncurses5 lib32bz2-1.0 libgtk2-perl libwww-perl && \
-    apt-get install -y unzip ca-certificates libc6:i386 zlib1g:i386 libstdc++6:i386 lib32z1 lib32ncurses5 lib32bz2-1.0 libxext6:i386 libxrender1:i386 libxtst6:i386 libxi6:i386 && \
+    apt-get install -y unzip ca-certificates libc6:i386 zlib1g:i386 lib32nss-mdns libstdc++6:i386 lib32z1 lib32ncurses5 lib32bz2-1.0 libxext6:i386 libxrender1:i386 libxtst6:i386 libxi6:i386 && \
     apt-get autoremove -y && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* && \
