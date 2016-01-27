@@ -2,30 +2,23 @@ FROM ubuntu:14.04
 
 MAINTAINER Ron Kurr <kurr@kurron.org>
 
-LABEL org.kurron.ide.name="Vault" org.kurron.ide.version=0.4.0
+LABEL org.kurron.ide.name="Juniper VPN" org.kurron.ide.version=0.0.0
 
-ADD https://releases.hashicorp.com/vault/0.4.0/vault_0.4.0_linux_amd64.zip /tmp/ide.zip 
+ADD ncsvc /usr/local/bin/ncsvc
+ADD cert /usr/local/bin/cert
 
-RUN apt-get update && \
-    apt-get install -y unzip ca-certificates && \
-    unzip /tmp/ide.zip -d /usr/local/bin && \
+RUN dpkg --add-architecture i386 && \
+    apt-get update && \
+#   apt-get install -y unzip ca-certificates libc6-i386 zlib1g lib32z1 lib32ncurses5 lib32bz2-1.0 libgtk2-perl libwww-perl && \
+    apt-get install -y unzip ca-certificates libc6:i386 zlib1g:i386 libstdc++6:i386 lib32z1 lib32ncurses5 lib32bz2-1.0 libxext6:i386 libxrender1:i386 libxtst6:i386 libxi6:i386 && \
     apt-get autoremove -y && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* && \
     rm -rf /tmp/*
 
-RUN chmod 0555 /usr/local/bin/*
+RUN chmod 6711 /usr/local/bin/ncsvc
+RUN chmod 0444 /usr/local/bin/cert
 
-# Create a user and group that matches what is in most Vagrant boxes
-RUN groupadd --gid 1000 developer && \
-    useradd --gid 1000 --uid 1000 --create-home --shell /bin/bash developer && \
-    chown -R developer:developer /home/developer
+WORKDIR /usr/local/bin
 
-# the user of this image is expected to mount his actual home directory to this one
-VOLUME ["/home/developer"]
-VOLUME ["/pwd"]
-
-ENV HOME /home/developer
-WORKDIR /pwd
-ENTRYPOINT ["/usr/local/bin/vault"]
-CMD ["--version"]
+ENTRYPOINT ["./ncsvc", "--log-level=5", "-h portal.transparent.com", "-U https://portal.transparent.com/mac", "-m fe9fefe1797891b183c35fd04a490bd0", "-f /usr/local/bin/cert", "-u ashkop", "-r Macintosh_Users", "-p 'bob'"]

@@ -1,8 +1,4 @@
-vault:
+juniper:
     build: .
-    container_name: "vault"
+    container_name: "juniper"
     net: "host"
-    volumes:
-        - /home/vagrant:/home/developer
-        - .:/pwd
-    user: 1000:1000
