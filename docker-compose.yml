@@ -1,0 +1,8 @@
+vault:
+    build: .
+    container_name: "vault"
+    net: "host"
+    volumes:
+        - /home/vagrant:/home/developer
+        - .:/pwd
+    user: 1000:1000
